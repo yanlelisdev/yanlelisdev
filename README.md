@@ -1,4 +1,4 @@
-## Bem-vindo(a) ao perfil do Dev em Dobro 😁
+## Bem-vindo(a) ao meu perfil essa é a versão 1.0 😁
 
  <div>
    <a href="https://github.com/yanlelisdev">
