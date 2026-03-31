@@ -1,0 +1,97 @@
+Nome: Jogo da Cobrinha do GitHub
+
+
+
+sobre:
+
+  # Agende o fluxo de trabalho para ser executado diariamente à meia-noite UTC
+
+  agendar:
+
+    - cron: "0 0 * * *"
+
+
+
+  # Permitir o acionamento manual do fluxo de trabalho
+
+  despacho de fluxo de trabalho:
+
+
+
+  # Acione o fluxo de trabalho ao enviar alterações para o branch principal
+
+  empurrar:
+
+    galhos:
+
+      - principal
+
+
+
+empregos:
+
+  gerar:
+
+    executa em: ubuntu-latest
+
+    tempo limite em minutos: 10
+
+
+
+    passos:
+
+      # Passo 1: Faça o checkout do repositório
+
+      - nome: Repositório de Checkout
+
+        utiliza: ações/checkout@v3
+
+
+
+      # Etapa 2: Gere as animações da cobra
+
+      - nome: Gerar animações de cobras para contribuições no GitHub
+
+        utiliza: Platane/snk@v3
+
+        com:
+
+          # Nome de usuário do GitHub para gerar a animação
+
+          github_user_name: ${{ github.repository_owner }}
+
+
+
+          # Defina os arquivos de saída e suas configurações
+
+          saídas: |
+
+            dist/github-snake.svg
+
+            dist/github-snake-dark.svg?palette=github-dark
+
+            dist/ocean.gif?color_snake=orange&color_dots=#bfd6f6,#8dbdff,#64a1f4,#4b91f1,#3c7dd9
+
+        ambiente:
+
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+
+      # Etapa 3: Implante os arquivos gerados no branch 'output'
+
+      - nome: Implantar no Branch de Saída
+
+        utiliza: peaceiris/actions-gh-pages@v3
+
+        com:
+
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+          diretório_de_publicação: ./dist
+
+          publicar_branch: saída
+
+          Opcionalmente, você pode definir uma mensagem de commit personalizada.
+
+          commit_message: "Atualizar animação da cobra [ignorar ci]"
