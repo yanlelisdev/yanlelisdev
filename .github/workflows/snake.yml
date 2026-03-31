@@ -1,70 +1,70 @@
-Nome: Jogo da Cobrinha do GitHub
+name: GitHub Snake Game
 
 
 
-sobre:
+on:
 
-  # Agende o fluxo de trabalho para ser executado diariamente à meia-noite UTC
+  # Schedule the workflow to run daily at midnight UTC
 
-  agendar:
+  schedule:
 
     - cron: "0 0 * * *"
 
 
 
-  # Permitir o acionamento manual do fluxo de trabalho
+  # Allow manual triggering of the workflow
 
-  despacho de fluxo de trabalho:
-
-
-
-  # Acione o fluxo de trabalho ao enviar alterações para o branch principal
-
-  empurrar:
-
-    galhos:
-
-      - principal
+  workflow_dispatch:
 
 
 
-empregos:
+  # Trigger the workflow on pushes to the main branch
 
-  gerar:
+  push:
 
-    executa em: ubuntu-latest
+    branches:
 
-    tempo limite em minutos: 10
-
-
-
-    passos:
-
-      # Passo 1: Faça o checkout do repositório
-
-      - nome: Repositório de Checkout
-
-        utiliza: ações/checkout@v3
+      - main
 
 
 
-      # Etapa 2: Gere as animações da cobra
+jobs:
 
-      - nome: Gerar animações de cobras para contribuições no GitHub
+  generate:
 
-        utiliza: Platane/snk@v3
+    runs-on: ubuntu-latest
 
-        com:
+    timeout-minutes: 10
 
-          # Nome de usuário do GitHub para gerar a animação
+
+
+    steps:
+
+      # Step 1: Checkout the repository
+
+      - name: Checkout Repository
+
+        uses: actions/checkout@v3
+
+
+
+      # Step 2: Generate the snake animations
+
+      - name: Generate GitHub Contributions Snake Animations
+
+        uses: Platane/snk@v3
+
+        with:
+
+          # GitHub username to generate the animation for
 
           github_user_name: ${{ github.repository_owner }}
 
 
 
-          # Defina os arquivos de saída e suas configurações
+          # Define the output files and their configurations
 
-          saídas: |
+          outputs: |
 
             dist/github-snake.svg
 
@@ -72,26 +72,27 @@ empregos:
 
             dist/ocean.gif?color_snake=orange&color_dots=#bfd6f6,#8dbdff,#64a1f4,#4b91f1,#3c7dd9
 
-        ambiente:
+        env:
 
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
 
-      # Etapa 3: Implante os arquivos gerados no branch 'output'
+      # Step 3: Deploy the generated files to the 'output' branch
 
-      - nome: Implantar no Branch de Saída
+      - name: Deploy to Output Branch
 
-        utiliza: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v3
 
-        com:
+        with:
 
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-          diretório_de_publicação: ./dist
+          publish_dir: ./dist
 
-          publicar_branch: saída
+          publish_branch: output
 
-          Opcionalmente, você pode definir uma mensagem de commit personalizada.
+          # Optionally, you can set a custom commit message
 
-          commit_message: "Atualizar animação da cobra [ignorar ci]"
+          commit_message: "Update snake animation [skip ci]"
+
